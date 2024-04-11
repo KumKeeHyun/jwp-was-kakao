@@ -7,22 +7,33 @@ import java.util.Map.Entry;
 
 public class HttpResponseRenderer {
 
-    // TODO: 리펙토링
+    private static final String CRLF = "\r\n";
+    private static final String STATUS_LINE_FMT = "HTTP/1.1 %d %s" + CRLF;
+    private static final String HEADER_FMT = "%s: %s" + CRLF;
+
     public void render(DataOutputStream dos, HttpResponse response) throws IOException {
-        HttpStatus status = response.getStatus();
-        dos.writeBytes(String.format("HTTP/1.1 %d %s \r\n", status.getCode(), status.getReasonPhrase()));
+        renderStatusLine(dos, response.getStatus());
+        renderHeaders(dos, response.getHeaders());
+        renderBody(dos, response);
+        dos.flush();
+    }
 
-        Map<String, String> headers = response.getHeaders();
-        for (Entry<String, String> entry : headers.entrySet()) {
-            String s = entry.getKey() + ":" + entry.getValue() + "\r\n";
-            dos.writeBytes(s);
+    private void renderStatusLine(DataOutputStream dos, HttpStatus status) throws IOException {
+        dos.writeBytes(String.format(STATUS_LINE_FMT, status.getCode(), status.getReasonPhrase()));
+    }
+
+    private static void renderHeaders(DataOutputStream dos, Map<String, String> headers) throws IOException {
+        for (Entry<String, String> header : headers.entrySet()) {
+            dos.writeBytes(String.format(HEADER_FMT, header.getKey(), header.getValue()));
         }
-        dos.writeBytes("\r\n");
+        dos.writeBytes(CRLF);
+    }
 
+    private static void renderBody(DataOutputStream dos, HttpResponse response) throws IOException {
         byte[] body = response.getContent();
         if (body != null && body.length != 0) {
             dos.write(body, 0, body.length);
         }
-        dos.flush();
     }
+
 }

@@ -1,5 +1,7 @@
 package webserver.response;
 
+import webserver.request.HttpHeaders;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,15 +9,15 @@ import java.util.Map;
 public class HttpResponse {
 
     private HttpStatus status;
-    private final Map<String, String> headers;
+    private final HttpHeaders headers;
     private byte[] content;
 
     public HttpResponse() {
-        this.headers = new HashMap<>();
+        this.headers = new HttpHeaders();
     }
 
     public void addHeader(String key, String value) {
-        this.headers.put(key, value);
+        this.headers.addHeader(key, value);
     }
 
     public void contentType(MediaType mediaType) {
@@ -37,7 +39,7 @@ public class HttpResponse {
     }
 
     public Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
+        return headers.getAllFields();
     }
 
     public byte[] getContent() {

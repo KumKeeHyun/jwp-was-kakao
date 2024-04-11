@@ -1,5 +1,6 @@
 package webserver.request;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,10 @@ public class HttpHeaders {
     
     public void addHeader(String name, String value) {
         this.fields.put(name, value);
+    }
+
+    public Map<String, String> getAllFields() {
+        return Collections.unmodifiableMap(fields);
     }
 
     public String getFieldValue(String fieldName) {
