@@ -3,11 +3,11 @@ package webserver;
 import api.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.handler.Handler;
-import webserver.handler.HandlerComposite;
-import webserver.request.HttpMethod;
-import webserver.request.HttpRequestParser;
-import webserver.response.HttpResponseRenderer;
+import webserver.mvc.Handler;
+import webserver.mvc.HandlerComposite;
+import webserver.http.HttpMethod;
+import webserver.http.HttpRequestParser;
+import webserver.http.HttpResponseRenderer;
 
 import java.net.ServerSocket;
 import java.net.Socket;

@@ -2,9 +2,9 @@ package api;
 
 import db.DataBase;
 import model.User;
-import webserver.request.HttpRequest;
-import webserver.response.HttpResponse;
-import webserver.response.HttpStatus;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
+import webserver.http.HttpStatus;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
