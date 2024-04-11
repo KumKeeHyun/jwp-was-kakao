@@ -1,14 +1,13 @@
 package webserver.response;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import utils.FileIoUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
-
-import utils.FileIoUtils;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileViewTest {
 

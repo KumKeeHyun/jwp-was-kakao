@@ -1,17 +1,16 @@
 package webserver;
 
-import java.net.ServerSocket;
-import java.net.Socket;
-
+import api.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import api.UserController;
 import webserver.handler.Handler;
 import webserver.handler.HandlerComposite;
 import webserver.request.HttpMethod;
 import webserver.request.HttpRequestParser;
 import webserver.response.HttpResponseRenderer;
+
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class WebApplicationServer {
     private static final Logger logger = LoggerFactory.getLogger(WebApplicationServer.class);

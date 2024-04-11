@@ -1,15 +1,15 @@
 package webserver.handler;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import webserver.request.HttpRequest;
 import webserver.response.FileView;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
 import webserver.response.MediaType;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StaticResourceHandler implements Handler {
 

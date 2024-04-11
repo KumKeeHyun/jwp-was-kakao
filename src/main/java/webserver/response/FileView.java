@@ -1,8 +1,8 @@
 package webserver.response;
 
-import java.util.Optional;
-
 import utils.FileIoUtils;
+
+import java.util.Optional;
 
 public class FileView {
 

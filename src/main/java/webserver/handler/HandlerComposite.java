@@ -1,12 +1,12 @@
 package webserver.handler;
 
-import java.io.IOException;
-import java.util.EnumMap;
-import java.util.Map;
-
 import webserver.request.HttpMethod;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class HandlerComposite implements Handler {
 

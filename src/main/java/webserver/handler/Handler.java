@@ -1,9 +1,9 @@
 package webserver.handler;
 
-import java.io.IOException;
-
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
+
+import java.io.IOException;
 
 @FunctionalInterface
 public interface Handler {
