@@ -1,5 +1,9 @@
 package webserver.response;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public enum MediaType {
     HTML("text/html", "html"),
     CSS("text/css", "css"),
@@ -15,14 +19,20 @@ public enum MediaType {
         this.extension = extension;
     }
 
+    private static final Map<String, MediaType> mediaTypes;
+
+    static {
+        mediaTypes = Arrays.stream(values())
+                .collect(Collectors.toUnmodifiableMap(MediaType::getExtension, v -> v));
+    }
+
     public static MediaType fromExtension(String extension) {
         extension = extension.toLowerCase();
-        for (MediaType mediaType : values()) {
-            if (mediaType.extension.equals(extension)) {
-                return mediaType;
-            }
-        }
-        return OCTET_STREAM;
+        return mediaTypes.getOrDefault(extension, OCTET_STREAM);
+    }
+
+    private String getExtension() {
+        return extension;
     }
 
     public String getMediaType() {
