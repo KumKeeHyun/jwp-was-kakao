@@ -3,7 +3,6 @@ package webserver;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import org.slf4j.Logger;
@@ -34,11 +33,10 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                      connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream in = connection.getInputStream(); DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
             HttpRequest request = parser.parseRequest(in);
-            DataOutputStream dos = new DataOutputStream(out);
             HttpResponse response = handler.handle(request);
-            renderer.render(dos, response);
+            renderer.render(out, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
