@@ -1,18 +1,18 @@
 package webserver.handler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import org.junit.jupiter.api.Test;
-
 import utils.FileIoUtils;
 import webserver.request.HttpMethod;
 import webserver.request.HttpRequest;
 import webserver.response.HttpResponse;
 import webserver.response.HttpStatus;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class StaticResourceHandlerTest {
 
@@ -21,7 +21,7 @@ public class StaticResourceHandlerTest {
         // given
         StaticResourceHandler handler = new StaticResourceHandler("./templates", "./static");
         HttpRequest request = new HttpRequest(HttpMethod.GET, "/static-test.css", "HTTP/1.1",
-                                              null, null, null);
+                Collections.emptyMap(), null);
         byte[] expected = FileIoUtils.loadFileFromClasspath("./static/static-test.css");
 
         // when
@@ -39,7 +39,7 @@ public class StaticResourceHandlerTest {
         // given
         StaticResourceHandler handler = new StaticResourceHandler("./templates", "./static");
         HttpRequest request = new HttpRequest(HttpMethod.GET, "/templates-test.css", "HTTP/1.1",
-                                              null, null, null);
+                Collections.emptyMap(), null);
         byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/templates-test.css");
 
         // when
@@ -57,7 +57,7 @@ public class StaticResourceHandlerTest {
         // given
         StaticResourceHandler handler = new StaticResourceHandler("./templates", "./static");
         HttpRequest request = new HttpRequest(HttpMethod.GET, "/test.html", "HTTP/1.1",
-                                              null, null, null);
+                Collections.emptyMap(), null);
         byte[] expected = FileIoUtils.loadFileFromClasspath("./templates/test.html");
 
         // when
@@ -75,7 +75,7 @@ public class StaticResourceHandlerTest {
         // given
         StaticResourceHandler handler = new StaticResourceHandler("./templates", "./static");
         HttpRequest request = new HttpRequest(HttpMethod.GET, "/invalid.html", "HTTP/1.1",
-                                              null, null, null);
+                Collections.emptyMap(), null);
 
         // when
         HttpResponse response = handler.handle(request);
