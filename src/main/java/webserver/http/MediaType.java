@@ -2,6 +2,7 @@ package webserver.http;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum MediaType {
@@ -23,7 +24,7 @@ public enum MediaType {
 
     static {
         mediaTypes = Arrays.stream(values())
-                .collect(Collectors.toUnmodifiableMap(MediaType::getExtension, v -> v));
+                .collect(Collectors.toUnmodifiableMap(MediaType::getExtension, Function.identity()));
     }
 
     public static MediaType fromExtension(String extension) {

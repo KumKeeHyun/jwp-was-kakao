@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequestParser;
 import webserver.http.HttpResponse;
 import webserver.http.HttpResponseRenderer;
-import webserver.http.HttpStatus;
 import webserver.mvc.Handler;
+import webserver.mvc.StaticRenderer;
 import webserver.mvc.StaticResourceHandler;
 import webserver.mvc.route.RouteHandler;
 
@@ -22,15 +22,14 @@ public class WebApplicationServer {
     private static final Handler handler;
 
     static {
-        UserController userController = new UserController();
-
-        RouteHandler route = new RouteHandler(new StaticResourceHandler("./templates", "./static"));
+        StaticResourceHandler staticResourceHandler = new StaticResourceHandler(new StaticRenderer("./templates", "./static"));
+        RouteHandler route = new RouteHandler(staticResourceHandler);
         route.addGet("/", request -> {
             HttpResponse response = new HttpResponse();
-            response.responseStatus(HttpStatus.FOUND);
-            response.addHeader("Location", "/index.html");
+            response.redirectUrl("/index.html");
             return response;
         });
+        UserController userController = new UserController();
         route.addPost("/user/create", userController::createUser);
 
         handler = route;

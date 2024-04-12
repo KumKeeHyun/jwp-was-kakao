@@ -4,7 +4,6 @@ import db.DataBase;
 import model.User;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
-import webserver.http.HttpStatus;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -13,17 +12,23 @@ import java.util.stream.Collectors;
 
 public class UserController {
 
-    // TODO: 리펙토링
+    public static final String Field_DELIMITER = "&";
+    public static final String KEY_VALUE_DELIMITER = "=";
+
     public HttpResponse createUser(HttpRequest request) {
-        String body = new String(request.getBodyContent(), StandardCharsets.UTF_8);
-        Map<String, String> params = Arrays.stream(body.split("&"))
-                                           .map(elem -> elem.split("="))
-                                           .collect(Collectors.toMap(tokens -> tokens[0], tokens -> tokens[1]));
-        DataBase.addUser(new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email")));
+        User newUser = parseToUser(request.getBodyContent());
+        DataBase.addUser(newUser);
 
         HttpResponse response = new HttpResponse();
-        response.responseStatus(HttpStatus.FOUND);
-        response.addHeader("Location", "/index.html");
+        response.redirectUrl("/index.html");
         return response;
+    }
+
+    private User parseToUser(byte[] content) {
+        String body = new String(content, StandardCharsets.UTF_8);
+        Map<String, String> params = Arrays.stream(body.split(Field_DELIMITER))
+                .map(elem -> elem.split(KEY_VALUE_DELIMITER, 2))
+                .collect(Collectors.toMap(tokens -> tokens[0], tokens -> tokens[1]));
+        return new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
     }
 }

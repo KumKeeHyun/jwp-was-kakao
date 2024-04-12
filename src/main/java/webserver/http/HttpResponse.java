@@ -20,6 +20,10 @@ public class HttpResponse {
         addHeader("Content-Type", mediaType.getMediaType());
     }
 
+    public void redirectUrl(String url) {
+        responseStatus(HttpStatus.FOUND);
+        addHeader("Location", url);
+    }
 
     public void responseStatus(HttpStatus status) {
         this.status = status;
