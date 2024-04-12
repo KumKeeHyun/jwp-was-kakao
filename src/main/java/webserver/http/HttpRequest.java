@@ -8,6 +8,8 @@ public class HttpRequest {
     private final HttpHeaders headers;
     private final byte[] bodyContent;
 
+    private Map<String, String> pathVariables;
+
 
     public HttpRequest(HttpMethod method, String path, String version, Map<String, String> headers, byte[] bodyContent) {
         this(method, path, version, new HttpHeaders(headers), bodyContent);
@@ -21,6 +23,10 @@ public class HttpRequest {
         this.requestLine = requestLine;
         this.headers = headers;
         this.bodyContent = bodyContent;
+    }
+
+    public void setPathVariables(Map<String, String> pathVariables) {
+        this.pathVariables = pathVariables;
     }
 
     public HttpMethod getMethod() {
@@ -41,6 +47,13 @@ public class HttpRequest {
 
     public String getParameter(String key) {
         return requestLine.getQueryParameter(key);
+    }
+
+    public String getPathVariable(String key) {
+        if (pathVariables == null) {
+            return "";
+        }
+        return pathVariables.getOrDefault(key, "");
     }
 
     public byte[] getBodyContent() {

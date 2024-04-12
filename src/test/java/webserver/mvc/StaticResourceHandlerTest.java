@@ -6,7 +6,6 @@ import webserver.http.HttpMethod;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
-import webserver.mvc.StaticResourceHandler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

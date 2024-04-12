@@ -2,11 +2,11 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.mvc.Handler;
 import webserver.http.HttpRequest;
 import webserver.http.HttpRequestParser;
 import webserver.http.HttpResponse;
 import webserver.http.HttpResponseRenderer;
+import webserver.mvc.Handler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

@@ -29,7 +29,7 @@ public class RequestLine {
     }
 
     public String getQueryParameter(String key) {
-        return uri.getQueryParameters().get(key);
+        return uri.getQueryParameters().getOrDefault(key, "");
     }
 
 

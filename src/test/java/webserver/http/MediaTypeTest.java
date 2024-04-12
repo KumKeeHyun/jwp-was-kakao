@@ -1,7 +1,6 @@
 package webserver.http;
 
 import org.junit.jupiter.api.Test;
-import webserver.http.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

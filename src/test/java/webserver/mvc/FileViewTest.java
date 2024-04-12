@@ -2,7 +2,6 @@ package webserver.mvc;
 
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
-import webserver.mvc.FileView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
