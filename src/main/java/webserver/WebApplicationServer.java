@@ -4,7 +4,9 @@ import api.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequestParser;
+import webserver.http.HttpResponse;
 import webserver.http.HttpResponseRenderer;
+import webserver.http.HttpStatus;
 import webserver.mvc.Handler;
 import webserver.mvc.StaticResourceHandler;
 import webserver.mvc.route.RouteHandler;
@@ -23,6 +25,12 @@ public class WebApplicationServer {
         UserController userController = new UserController();
 
         RouteHandler route = new RouteHandler(new StaticResourceHandler("./templates", "./static"));
+        route.addGet("/", request -> {
+            HttpResponse response = new HttpResponse();
+            response.responseStatus(HttpStatus.FOUND);
+            response.addHeader("Location", "/index.html");
+            return response;
+        });
         route.addPost("/user/create", userController::createUser);
 
         handler = route;
