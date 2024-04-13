@@ -9,6 +9,7 @@ import webserver.http.HttpResponseRenderer;
 import webserver.mvc.Handler;
 import webserver.mvc.StaticRenderer;
 import webserver.mvc.StaticResourceHandler;
+import webserver.mvc.TemplateRenderer;
 import webserver.mvc.route.RouteHandler;
 
 import java.net.ServerSocket;
@@ -23,14 +24,17 @@ public class WebApplicationServer {
 
     static {
         StaticResourceHandler staticResourceHandler = new StaticResourceHandler(new StaticRenderer("./templates", "./static"));
+        TemplateRenderer templateRenderer = new TemplateRenderer("/templates");
+
         RouteHandler route = new RouteHandler(staticResourceHandler);
         route.addGet("/", request -> {
             HttpResponse response = new HttpResponse();
             response.redirectUrl("/index.html");
             return response;
         });
-        UserController userController = new UserController();
+        UserController userController = new UserController(templateRenderer);
         route.addPost("/user/create", userController::createUser);
+        route.addGet("/user/list", userController::listUser);
 
         handler = route;
     }
