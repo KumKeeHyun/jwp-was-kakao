@@ -1,5 +1,6 @@
 package webserver.http;
 
+import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
@@ -34,11 +35,15 @@ public class HttpResponse {
         addHeader("Content-Length", String.valueOf(content.length));
     }
 
+    public void setCookie(HttpCookie cookie) {
+        headers.addCookie(cookie);
+    }
+
     public HttpStatus getStatus() {
         return status;
     }
 
-    public Map<String, String> getHeaders() {
+    public List<Map.Entry<String, String>> getHeaders() {
         return headers.getAllFields();
     }
 

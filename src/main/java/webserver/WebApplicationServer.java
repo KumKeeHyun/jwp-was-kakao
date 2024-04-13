@@ -35,6 +35,7 @@ public class WebApplicationServer {
         UserController userController = new UserController(templateRenderer);
         route.addPost("/user/create", userController::createUser);
         route.addGet("/user/list", userController::listUser);
+        route.addPost("/user/login", userController::loginUser);
 
         handler = route;
     }

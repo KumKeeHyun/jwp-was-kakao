@@ -2,7 +2,7 @@ package webserver.http;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class HttpResponseRenderer {
@@ -22,8 +22,8 @@ public class HttpResponseRenderer {
         dos.writeBytes(String.format(STATUS_LINE_FMT, status.getCode(), status.getReasonPhrase()));
     }
 
-    private static void renderHeaders(DataOutputStream dos, Map<String, String> headers) throws IOException {
-        for (Entry<String, String> header : headers.entrySet()) {
+    private static void renderHeaders(DataOutputStream dos, List<Entry<String, String>> headers) throws IOException {
+        for (Entry<String, String> header : headers) {
             dos.writeBytes(String.format(HEADER_FMT, header.getKey(), header.getValue()));
         }
         dos.writeBytes(CRLF);

@@ -45,6 +45,10 @@ public class HttpRequest {
         return headers.getFieldValue(key);
     }
 
+    public HttpCookie getCookie(String key) {
+        return headers.getCookie(key);
+    }
+
     public String getParameter(String key) {
         return requestLine.getQueryParameter(key);
     }
