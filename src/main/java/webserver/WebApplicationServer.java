@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import webserver.http.HttpRequestParser;
 import webserver.http.HttpResponse;
 import webserver.http.HttpResponseRenderer;
-import webserver.mvc.Handler;
-import webserver.mvc.StaticRenderer;
-import webserver.mvc.StaticResourceHandler;
-import webserver.mvc.TemplateRenderer;
+import webserver.mvc.*;
 import webserver.mvc.route.RouteHandler;
 
 import java.net.ServerSocket;
@@ -21,6 +18,7 @@ public class WebApplicationServer {
     private static final HttpRequestParser requestParser = new HttpRequestParser();
     private static final HttpResponseRenderer responseRenderer = new HttpResponseRenderer();
     private static final Handler handler;
+    private static final SessionManager sessionManager = new MemorySessionManager();
 
     static {
         StaticResourceHandler staticResourceHandler = new StaticResourceHandler(new StaticRenderer("./templates", "./static"));
@@ -34,10 +32,11 @@ public class WebApplicationServer {
         });
         UserController userController = new UserController(templateRenderer);
         route.addPost("/user/create", userController::createUser);
-        route.addGet("/user/list", userController::listUser);
+        route.addGet("/user/list.html", SessionMiddlewareUtil.redirectIfNotLogin(userController::listUser, "/user/login.html"));
         route.addPost("/user/login", userController::loginUser);
+        route.addGet("/user/login.html", SessionMiddlewareUtil.redirectIfAlreadyLogin(userController::loginPage, "/index.html"));
 
-        handler = route;
+        handler = new SessionManagerHandler(route, sessionManager);
     }
 
     public static void main(String[] args) throws Exception {

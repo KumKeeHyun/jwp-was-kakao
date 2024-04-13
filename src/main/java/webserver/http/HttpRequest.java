@@ -1,15 +1,16 @@
 package webserver.http;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class HttpRequest {
 
     private final RequestLine requestLine;
     private final HttpHeaders headers;
     private final byte[] bodyContent;
-
     private Map<String, String> pathVariables;
-
+    private Supplier<Session> getSessionFn = () -> null;
+    private Runnable removeSessionFn = () -> {};
 
     public HttpRequest(HttpMethod method, String path, String version, Map<String, String> headers, byte[] bodyContent) {
         this(method, path, version, new HttpHeaders(headers), bodyContent);
@@ -63,4 +64,18 @@ public class HttpRequest {
     public byte[] getBodyContent() {
         return bodyContent;
     }
+
+    public void withSession(Supplier<Session> getSessionFn, Runnable remoteSessionFn) {
+        this.getSessionFn = getSessionFn;
+        this.removeSessionFn = remoteSessionFn;
+    }
+
+    public Session getSession() {
+        return getSessionFn.get();
+    }
+
+    public void remoteSession() {
+        removeSessionFn.run();
+    }
+
 }

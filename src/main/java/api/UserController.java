@@ -2,9 +2,9 @@ package api;
 
 import db.DataBase;
 import model.User;
-import webserver.http.HttpCookie;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.Session;
 import webserver.mvc.TemplateRenderer;
 
 import java.nio.charset.StandardCharsets;
@@ -53,6 +53,12 @@ public class UserController {
         return response;
     }
 
+    public HttpResponse loginPage(HttpRequest request) {
+        HttpResponse response = new HttpResponse();
+        templateRenderer.render(response, "user/login", null);
+        return response;
+    }
+
     public HttpResponse loginUser(HttpRequest request) {
         Map<String, String> params = parseForm(request.getBodyContent());
         String userId = params.get("userId");
@@ -60,17 +66,19 @@ public class UserController {
 
         HttpResponse response = new HttpResponse();
 
-        boolean loginFailed = Optional.of(DataBase.findUserById(userId))
-                .filter(user -> user.getPassword().equals(password))
+        User user = DataBase.findUserById(userId);
+        boolean loginFailed = Optional.ofNullable(user)
+                .map(User::getPassword)
+                .filter(pw -> pw.equals(password))
                 .isEmpty();
         if (loginFailed) {
             response.redirectUrl("/user/login_failed.html");
             return response;
         }
 
-        HttpCookie cookie = new HttpCookie("JSESSIONID", UUID.randomUUID().toString());
-        cookie.setPath("/");
-        response.setCookie(cookie);
+        Session session = new Session(UUID.randomUUID().toString());
+        session.setAttribute("user", user);
+        response.setSession(session);
         response.redirectUrl("/index.html");
         return response;
     }

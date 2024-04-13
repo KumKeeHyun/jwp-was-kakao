@@ -8,6 +8,7 @@ public class HttpResponse {
     private HttpStatus status;
     private final HttpHeaders headers;
     private byte[] content;
+    private Session session;
 
     public HttpResponse() {
         this.headers = new HttpHeaders();
@@ -49,5 +50,13 @@ public class HttpResponse {
 
     public byte[] getContent() {
         return content;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

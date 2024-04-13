@@ -2,6 +2,9 @@ package webserver.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HttpHeadersParser {
 
@@ -22,8 +25,7 @@ public class HttpHeadersParser {
             }
             String[] tokens = header.split(HEADER_KV_DELIMITER, 2);
             if (tokens[0].equals("Cookie")) {
-                HttpCookie cookie = parseCookie(tokens[1]);
-                headers.addCookie(cookie);
+                parseCookie(tokens[1]).forEach(headers::addCookie);
                 continue;
             }
             headers.addHeader(tokens[0], tokens[1]);
@@ -31,17 +33,10 @@ public class HttpHeadersParser {
         return headers;
     }
 
-    public static HttpCookie parseCookie(String headerField) {
-        String[] tokens = headerField.split(COOKIE_FIELD_DELIMITER);
-        if (tokens.length < 1) {
-            return null;
-        }
-        String[] kvTokens = tokens[0].split(COOKIE_KV_DELIMITER);
-        HttpCookie cookie = new HttpCookie(kvTokens[0], kvTokens[1]);
-        for (int i = 1; i < tokens.length; i++) {
-            String[] attrTokens = tokens[i].split("=");
-            cookie.setAttribute(attrTokens[0], attrTokens[1]);
-        }
-        return cookie;
+    public static List<HttpCookie> parseCookie(String headerField) {
+        return Arrays.stream(headerField.split(COOKIE_FIELD_DELIMITER))
+                .map(token -> token.split(COOKIE_KV_DELIMITER, 2))
+                .map(tokens -> new HttpCookie(tokens[0], tokens[1]))
+                .collect(Collectors.toList());
     }
 }
