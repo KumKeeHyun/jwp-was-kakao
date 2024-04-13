@@ -35,6 +35,7 @@ public class WebApplicationServer {
         route.addGet("/user/list.html", SessionMiddlewareUtil.redirectIfNotLogin(userController::listUser, "/user/login.html"));
         route.addPost("/user/login", userController::loginUser);
         route.addGet("/user/login.html", SessionMiddlewareUtil.redirectIfAlreadyLogin(userController::loginPage, "/index.html"));
+        route.addGet("/user/profile.html", SessionMiddlewareUtil.redirectIfNotLogin(userController::profilePage, "/user/login.html"));;
 
         handler = new SessionManagerHandler(route, sessionManager);
     }

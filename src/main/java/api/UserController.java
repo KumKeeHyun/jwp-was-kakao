@@ -82,4 +82,13 @@ public class UserController {
         response.redirectUrl("/index.html");
         return response;
     }
+
+    public HttpResponse profilePage(HttpRequest request) {
+        Session session = request.getSession();
+        User curUser = (User) session.getAttribute("user");
+
+        HttpResponse response = new HttpResponse();
+        templateRenderer.render(response, "user/profile", curUser);
+        return response;
+    }
 }
