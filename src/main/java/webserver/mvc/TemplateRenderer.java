@@ -22,14 +22,12 @@ public class TemplateRenderer {
     public void render(HttpResponse response, String path, Object model) {
         try {
             byte[] content = handlebars.compile(path).apply(model).getBytes();
-            response.responseBody(content);
+            response.ok(content);
             response.contentType(MediaType.HTML);
-            response.responseStatus(HttpStatus.OK);
             return;
         } catch (Exception ignore) {}
 
-        response.responseStatus(HttpStatus.NOT_FOUND);
+        response.notFound((path + "를 찾을 수 없습니다.").getBytes());
         response.contentType(MediaType.HTML);
-        response.responseBody((path + "를 찾을 수 없습니다.").getBytes());
     }
 }

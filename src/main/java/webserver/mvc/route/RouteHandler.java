@@ -16,9 +16,8 @@ public class RouteHandler implements Handler {
     public RouteHandler() {
         this(request -> {
             HttpResponse response = new HttpResponse();
-            response.responseStatus(HttpStatus.NOT_FOUND);
+            response.notFound((request.getPath() + "를 찾을 수 없습니다.").getBytes());
             response.contentType(MediaType.HTML);
-            response.responseBody((request.getPath() + "를 찾을 수 없습니다.").getBytes());
             return response;
         });
     }

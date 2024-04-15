@@ -22,16 +22,26 @@ public class HttpResponse {
         addHeader("Content-Type", mediaType.getMediaType());
     }
 
+    public void ok(byte[] content) {
+        responseStatus(HttpStatus.OK);
+        responseBody(content);
+    }
+
+    public void notFound(byte[] content) {
+        responseStatus(HttpStatus.NOT_FOUND);
+        responseBody(content);
+    }
+
     public void redirectUrl(String url) {
         responseStatus(HttpStatus.FOUND);
         addHeader("Location", url);
     }
 
-    public void responseStatus(HttpStatus status) {
+    private void responseStatus(HttpStatus status) {
         this.status = status;
     }
 
-    public void responseBody(byte[] content) {
+    private void responseBody(byte[] content) {
         this.content = content;
         addHeader("Content-Length", String.valueOf(content.length));
     }

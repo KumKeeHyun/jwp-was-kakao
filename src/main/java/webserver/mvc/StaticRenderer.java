@@ -21,15 +21,13 @@ public class StaticRenderer {
     public void render(HttpResponse response, String path) {
         for (StaticView view : views) {
             try {
-                response.responseBody(view.render(path));
+                response.ok(view.render(path));
                 response.contentType(extractMediaType(path));
-                response.responseStatus(HttpStatus.OK);
                 return;
             } catch (Exception ignore) {}
         }
-        response.responseStatus(HttpStatus.NOT_FOUND);
+        response.notFound((path + "를 찾을 수 없습니다.").getBytes());
         response.contentType(MediaType.HTML);
-        response.responseBody((path + "를 찾을 수 없습니다.").getBytes());
     }
 
     private MediaType extractMediaType(String path) {
