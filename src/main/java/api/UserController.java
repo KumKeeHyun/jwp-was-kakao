@@ -44,8 +44,6 @@ public class UserController {
     }
 
     public HttpResponse listUser(HttpRequest request) {
-        // TODO: 세션으로 로그인 유무 판단
-
         Collection<User> users = DataBase.findAll();
 
         HttpResponse response = new HttpResponse();
