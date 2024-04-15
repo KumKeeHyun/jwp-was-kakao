@@ -1,4 +1,4 @@
-package webserver;
+package webserver.mvc;
 
 import webserver.http.Session;
 

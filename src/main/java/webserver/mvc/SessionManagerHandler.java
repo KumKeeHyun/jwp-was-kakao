@@ -1,6 +1,5 @@
 package webserver.mvc;
 
-import webserver.SessionManager;
 import webserver.http.HttpCookie;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
