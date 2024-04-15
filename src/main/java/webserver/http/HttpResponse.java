@@ -21,7 +21,7 @@ public class HttpResponse {
     public void contentType(MediaType mediaType) {
         addHeader("Content-Type", mediaType.getMediaType());
     }
-
+  
     public void ok(byte[] content) {
         responseStatus(HttpStatus.OK);
         responseBody(content);
