@@ -4,7 +4,6 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import webserver.http.HttpResponse;
-import webserver.http.HttpStatus;
 import webserver.http.MediaType;
 
 public class TemplateRenderer {

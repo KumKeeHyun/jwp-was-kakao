@@ -1,7 +1,6 @@
 package webserver.mvc;
 
 import webserver.http.HttpResponse;
-import webserver.http.HttpStatus;
 import webserver.http.MediaType;
 
 import java.util.Arrays;

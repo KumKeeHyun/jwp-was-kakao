@@ -1,6 +1,9 @@
 package webserver.mvc.route;
 
-import webserver.http.*;
+import webserver.http.HttpMethod;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
+import webserver.http.MediaType;
 import webserver.mvc.Handler;
 
 import java.io.IOException;
