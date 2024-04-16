@@ -9,13 +9,15 @@ import java.io.IOException;
 
 public class SessionManagerHandler implements Handler {
 
-    public static final String SESSION_COOKIE = "JSESSIONID";
     private final Handler innerHandler;
+    private final String sessionName;
     private final SessionManager sessionManager;
 
-    public SessionManagerHandler(Handler innerHandler, SessionManager sessionManager) {
-        this.innerHandler = innerHandler;
+
+    public SessionManagerHandler(String sessionName, SessionManager sessionManager, Handler innerHandler) {
+        this.sessionName = sessionName;
         this.sessionManager = sessionManager;
+        this.innerHandler = innerHandler;
     }
 
     @Override
@@ -26,10 +28,11 @@ public class SessionManagerHandler implements Handler {
     }
 
     private void preHandle(HttpRequest request) {
-        HttpCookie sessionCookie = request.getCookie(SESSION_COOKIE);
+        HttpCookie sessionCookie = request.getCookie(sessionName);
         if (sessionCookie != null) {
             String sessionKey = sessionCookie.getValue();
             request.withSession(
+                    sessionName,
                     () -> sessionManager.findSession(sessionKey),
                     () -> sessionManager.remove(sessionKey)
             );
@@ -37,12 +40,12 @@ public class SessionManagerHandler implements Handler {
     }
 
     private HttpResponse postHandle(HttpResponse response) {
-        Session newSession = response.getSession();
+        Session newSession = response.getSession(sessionName);
         if (newSession != null) {
             sessionManager.add(newSession);
-            HttpCookie newSessionCookie = new HttpCookie(SESSION_COOKIE, newSession.getId());
+            HttpCookie newSessionCookie = new HttpCookie(sessionName, newSession.getId());
             newSessionCookie.setPath("/");
-            response.setCookie(newSessionCookie);
+            response.addCookie(newSessionCookie);
         }
         return response;
     }

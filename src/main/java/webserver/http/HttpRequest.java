@@ -1,6 +1,8 @@
 package webserver.http;
 
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HttpRequest {
@@ -9,8 +11,8 @@ public class HttpRequest {
     private final HttpHeaders headers;
     private final byte[] bodyContent;
     private Map<String, String> pathVariables;
-    private Supplier<Session> getSessionFn = () -> null;
-    private Runnable removeSessionFn = () -> {};
+    private Function<String, Session> getSessionFunction = id -> null;
+    private Consumer<String> removeSessionConsumer = id -> {};
 
     public HttpRequest(HttpMethod method, String path, String version, Map<String, String> headers, byte[] bodyContent) {
         this(method, path, version, new HttpHeaders(headers), bodyContent);
@@ -65,17 +67,31 @@ public class HttpRequest {
         return bodyContent;
     }
 
-    public void withSession(Supplier<Session> getSessionFn, Runnable remoteSessionFn) {
-        this.getSessionFn = getSessionFn;
-        this.removeSessionFn = remoteSessionFn;
+    public void withSession(String sessionName, Supplier<Session> getSessionSupplier, Runnable removeSessionRunnable) {
+        Function<String, Session> prevGetSessionFunction = this.getSessionFunction;
+        this.getSessionFunction = id -> {
+            if (id.equals(sessionName)) {
+                return getSessionSupplier.get();
+            }
+            return prevGetSessionFunction.apply(id);
+        };
+
+        Consumer<String> prevRemoveSessionConsumer = this.removeSessionConsumer;
+        this.removeSessionConsumer = id -> {
+            if (id.equals(sessionName)) {
+                removeSessionRunnable.run();
+                return;
+            }
+            prevRemoveSessionConsumer.accept(id);
+        };
     }
 
-    public Session getSession() {
-        return getSessionFn.get();
+    public Session getSession(String id) {
+        return getSessionFunction.apply(id);
     }
 
-    public void remoteSession() {
-        removeSessionFn.run();
+    public void removeSession(String id) {
+        removeSessionConsumer.accept(id);
     }
 
 }

@@ -23,6 +23,7 @@ public class WebApplicationServer {
     static {
         StaticResourceHandler staticResourceHandler = new StaticResourceHandler(new StaticRenderer("./templates", "./static"));
         TemplateRenderer templateRenderer = new TemplateRenderer("/templates");
+        UserController userController = new UserController(templateRenderer);
 
         RouteHandler route = new RouteHandler(staticResourceHandler);
         route.addGet("/", request -> {
@@ -30,14 +31,28 @@ public class WebApplicationServer {
             response.redirectUrl("/index.html");
             return response;
         });
-        UserController userController = new UserController(templateRenderer);
         route.addPost("/user/create", userController::createUser);
-        route.addGet("/user/list.html", SessionMiddlewareUtil.redirectIfNotLogin(userController::listUser, "/user/login.html"));
+        Handler listUserHandler = SessionLoginMiddlewareUtil.redirectIfNotLogin(
+                userController::listUser,
+                "/user/login.html",
+                UserController.LOGIN_SESSION_NAME
+        );
+        route.addGet("/user/list.html", listUserHandler);
         route.addPost("/user/login", userController::loginUser);
-        route.addGet("/user/login.html", SessionMiddlewareUtil.redirectIfAlreadyLogin(userController::loginPage, "/index.html"));
-        route.addGet("/user/profile.html", SessionMiddlewareUtil.redirectIfNotLogin(userController::profilePage, "/user/login.html"));;
+        Handler loginPageHandler = SessionLoginMiddlewareUtil.redirectIfAlreadyLogin(
+                userController::loginPage,
+                "/index.html",
+                UserController.LOGIN_SESSION_NAME
+        );
+        route.addGet("/user/login.html", loginPageHandler);
+        Handler profilePageHandler = SessionLoginMiddlewareUtil.redirectIfNotLogin(
+                userController::profilePage,
+                "/user/login.html",
+                UserController.LOGIN_SESSION_NAME
+        );
+        route.addGet("/user/profile.html", profilePageHandler);
 
-        handler = new SessionManagerHandler(route, sessionManager);
+        handler = new SessionManagerHandler(UserController.LOGIN_SESSION_NAME, sessionManager, route);
     }
 
     public static void main(String[] args) throws Exception {

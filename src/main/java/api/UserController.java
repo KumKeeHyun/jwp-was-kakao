@@ -15,6 +15,7 @@ public class UserController {
 
     public static final String Field_DELIMITER = "&";
     public static final String KEY_VALUE_DELIMITER = "=";
+    public static final String LOGIN_SESSION_NAME = "JSESSIONID";
 
     private final TemplateRenderer templateRenderer;
 
@@ -76,13 +77,13 @@ public class UserController {
 
         Session session = new Session(UUID.randomUUID().toString());
         session.setAttribute("user", user);
-        response.setSession(session);
+        response.saveSession(LOGIN_SESSION_NAME, session);
         response.redirectUrl("/index.html");
         return response;
     }
 
     public HttpResponse profilePage(HttpRequest request) {
-        Session session = request.getSession();
+        Session session = request.getSession(LOGIN_SESSION_NAME);
         User curUser = (User) session.getAttribute("user");
 
         HttpResponse response = new HttpResponse();

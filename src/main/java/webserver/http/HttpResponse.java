@@ -1,5 +1,6 @@
 package webserver.http;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +9,11 @@ public class HttpResponse {
     private HttpStatus status;
     private final HttpHeaders headers;
     private byte[] content;
-    private Session session;
+    private Map<String, Session> sessions;
 
     public HttpResponse() {
         this.headers = new HttpHeaders();
+        this.sessions = new HashMap<>();
     }
 
     public void addHeader(String key, String value) {
@@ -46,7 +48,7 @@ public class HttpResponse {
         addHeader("Content-Length", String.valueOf(content.length));
     }
 
-    public void setCookie(HttpCookie cookie) {
+    public void addCookie(HttpCookie cookie) {
         headers.addCookie(cookie);
     }
 
@@ -62,11 +64,11 @@ public class HttpResponse {
         return content;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void saveSession(String sessionName, Session session) {
+        this.sessions.put(sessionName, session);
     }
 
-    public Session getSession() {
-        return session;
+    public Session getSession(String sessionName) {
+        return sessions.get(sessionName);
     }
 }
