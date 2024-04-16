@@ -11,6 +11,7 @@ public class HttpHeadersParser {
     public static final String HEADER_KV_DELIMITER = ": ";
     public static final String COOKIE_FIELD_DELIMITER = "; ";
     public static final String COOKIE_KV_DELIMITER = "=";
+    public static final String COOKIE_HEADER = "Cookie";
 
     /*
     parse = *(message-header CRLF)
@@ -24,7 +25,7 @@ public class HttpHeadersParser {
                 break;
             }
             String[] tokens = header.split(HEADER_KV_DELIMITER, 2);
-            if (tokens[0].equals("Cookie")) {
+            if (tokens[0].equals(COOKIE_HEADER)) {
                 parseCookie(tokens[1]).forEach(headers::addCookie);
                 continue;
             }
