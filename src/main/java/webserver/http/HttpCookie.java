@@ -1,5 +1,10 @@
 package webserver.http;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +29,31 @@ public class HttpCookie {
     }
 
     public String getPath() {
-        return attributes.get("path");
+        return attributes.get("Path");
     }
 
     public void setPath(String path) {
-        setAttribute("path", path);
+        setAttribute("Path", path);
+    }
+
+    public String getDomain() {
+        return attributes.get("Domain");
+    }
+
+    public void setDomain(String domain) {
+        setAttribute("Domain", domain);
+    }
+
+    public LocalDateTime getExpires() {
+        String expires = attributes.get("Expires");
+        if (expires == null || expires.isEmpty()) {
+            return null;
+        }
+        return LocalDateTime.parse(expires, DateTimeFormatter.RFC_1123_DATE_TIME);
+    }
+
+    public void setExpires(LocalDateTime expireDate) {
+        setAttribute("Expires", expireDate.format(DateTimeFormatter.RFC_1123_DATE_TIME));
     }
 
     public void setAttribute(String key, String value) {
